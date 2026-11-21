@@ -1,1 +1,68 @@
 @import "tailwindcss";
+
+@media print {
+  @page {
+    size: A4 portrait;
+    margin: 15mm;
+  }
+
+  body {
+    background: #ffffff !important;
+    color: #0f172a !important;
+    font-size: 10pt;
+  }
+
+  /* Hide project switchers, headers, buttons and navigation overlays during print */
+  header,
+  nav,
+  aside,
+  button,
+  .no-print {
+    display: none !important;
+  }
+
+  /* Make report container full width with no scrollbars */
+  .report-printable-area {
+    position: static !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    overflow: visible !important;
+    height: auto !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    background: transparent !important;
+    color: #0f172a !important;
+    border: none !important;
+    box-shadow: none !important;
+  }
+
+  /* Ensure card backgrounds and text are legible for print */
+  .report-card {
+    page-break-inside: avoid;
+    border: 1px solid #cbd5e1 !important;
+    background: #ffffff !important;
+    color: #0f172a !important;
+    margin-bottom: 12pt;
+    padding: 12pt !important;
+  }
+
+  /* Invert dark mode styling for crisp paper printing */
+  .bg-slate-950,
+  .bg-slate-900,
+  .bg-slate-800 {
+    background: #ffffff !important;
+    color: #0f172a !important;
+    border-color: #e2e8f0 !important;
+  }
+
+  .text-white,
+  .text-slate-100,
+  .text-slate-200,
+  .text-slate-300 {
+    color: #0f172a !important;
+  }
+
+  .text-slate-400 {
+    color: #475569 !important;
+  }
+}

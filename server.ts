@@ -3,6 +3,7 @@ import dotenv from 'dotenv';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { GoogleGenAI, Type } from '@google/genai';
+import { generateReportPdf } from './server/pdfGenerator';
 
 dotenv.config();
 
@@ -454,6 +455,75 @@ with zipfile.ZipFile(zip_filename, 'w', zipfile.ZIP_DEFLATED) as zipf:
     res.download('/tmp/personal-finance-advisor-bot.zip', 'personal-finance-advisor-bot.zip');
   } catch (error: any) {
     res.status(500).json({ error: error.message || 'Failed to create zip' });
+  }
+});
+
+// API: Download Smart Traffic Signal RL project zip
+app.get('/api/download-traffic-zip', async (_req: Request, res: Response) => {
+  try {
+    const { execSync } = await import('child_process');
+    execSync(
+      `python3 -c "
+import os, zipfile
+zip_filename = '/tmp/smart-traffic-signal-rl.zip'
+exclude_dirs = {'node_modules', '.git', 'dist', '__pycache__', 'venv'}
+exclude_exts = {'.zip', '.tar.gz', '.pyc'}
+with zipfile.ZipFile(zip_filename, 'w', zipfile.ZIP_DEFLATED) as zipf:
+    for root, dirs, files in os.walk('.'):
+        dirs[:] = [d for d in dirs if d not in exclude_dirs]
+        for file in files:
+            ext = os.path.splitext(file)[1]
+            if ext in exclude_exts:
+                continue
+            filepath = os.path.join(root, file)
+            arcname = os.path.relpath(filepath, '.')
+            zipf.write(filepath, arcname)
+"`,
+      { cwd: path.resolve(__dirname) }
+    );
+    res.download('/tmp/smart-traffic-signal-rl.zip', 'smart-traffic-signal-rl.zip');
+  } catch (error: any) {
+    res.status(500).json({ error: error.message || 'Failed to create traffic zip' });
+  }
+});
+
+// API: Download Hospital Emergency Management System (HEMS) project zip
+app.get('/api/download-hems-zip', async (_req: Request, res: Response) => {
+  try {
+    const { execSync } = await import('child_process');
+    execSync(
+      `python3 -c "
+import os, zipfile
+zip_filename = '/tmp/hems-hospital-emergency-management.zip'
+exclude_dirs = {'node_modules', '.git', 'dist', '__pycache__', 'venv'}
+exclude_exts = {'.zip', '.tar.gz', '.pyc'}
+with zipfile.ZipFile(zip_filename, 'w', zipfile.ZIP_DEFLATED) as zipf:
+    for root, dirs, files in os.walk('.'):
+        dirs[:] = [d for d in dirs if d not in exclude_dirs]
+        for file in files:
+            ext = os.path.splitext(file)[1]
+            if ext in exclude_exts:
+                continue
+            filepath = os.path.join(root, file)
+            arcname = os.path.relpath(filepath, '.')
+            zipf.write(filepath, arcname)
+"`,
+      { cwd: path.resolve(__dirname) }
+    );
+    res.download('/tmp/hems-hospital-emergency-management.zip', 'hems-hospital-emergency-management.zip');
+  } catch (error: any) {
+    res.status(500).json({ error: error.message || 'Failed to create hems zip' });
+  }
+});
+
+// API: Download formal IEEE Project Report as genuine PDF
+app.get(['/api/download-report-pdf', '/report.pdf', '/Personal_Finance_Advisor_Bot_Project_Report.pdf'], (req: Request, res: Response) => {
+  try {
+    const userEmail = (req.query.email as string) || 'shriramkanade968@gmail.com';
+    generateReportPdf(res, userEmail);
+  } catch (error: any) {
+    console.error('Failed to generate report PDF:', error);
+    res.status(500).json({ error: error.message || 'Failed to generate report PDF' });
   }
 });
 
