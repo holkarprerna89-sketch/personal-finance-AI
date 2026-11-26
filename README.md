@@ -469,5 +469,3 @@ The **Personal Finance Advisor Bot** successfully fulfills all design and functi
 
 ## 📄 License
 Apache-2.0 &middot; Prepared for Academic and Engineering Review.
-#   p e r s o n a l - f i n a n c e - a d v i s o r - b o t  
- 
